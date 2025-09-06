@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code-A-Pookalam | Onam Celebration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Righteous&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a2a6c, #004d40, #2e7d32);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: #ffeb3b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+            font-weight: normal;
+            background: linear-gradient(to right, #ff9800, #ffeb3b, #4caf50);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            padding: 0;
+            background: transparent;
+            border-radius: 50%;
+            box-shadow: none;
+            position: relative;
+        }
+        
+        canvas {
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: none;
+        }
+        
+        .emoji-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .emoji {
+            position: absolute;
+            font-size: 24px; /* Slightly larger for better visibility */
+            transform: translate(-50%, -50%);
+            z-index: 10; /* Ensure emojis appear above canvas elements */
+        }
+        
+        .message {
+            margin-top: 30px;
+            color: white;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            text-align: center;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            canvas {
+                width: 80vw;
+                height: 80vw;
+            }
+            
+            .emoji {
+                font-size: 20px; /* Adjusted for mobile */
+            }
+            
+            .message {
+                margin-top: 20px;
+                font-size: 1rem;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌸 Code-A-Pookalam 🌸</h1>
+        
+        <div class="canvas-container">
+            <canvas id="mcanvas" width="500" height="500"></canvas>
+            <div id="emoji-container" class="emoji-container"></div>
+        </div>
+        
+        <div class="message">
+            <p>Wishing you a joyful Onam filled with happiness, prosperity, and the vibrant colors of the pookalam!</p>
+            
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 Onam  | Created by Devi Krishna M S</p>
+        </div>
+    </div>
+
+    <script>
+        // Get canvas and context
+        var mycanvas = document.getElementById("mcanvas");
+        var con = mycanvas.getContext("2d");
+        var emojiContainer = document.getElementById("emoji-container");
+        
+        // Center the design on the canvas
+        var centerX = mycanvas.width / 2;
+        var centerY = mycanvas.height / 2;
+        
+        // Draw the pookalam design
+        function drawPookalam() {
+            // Clear canvas with transparent background
+            con.clearRect(0, 0, mycanvas.width, mycanvas.height);
+            
+            // Outer ring with new green color scheme
+            drawcircle(centerX, centerY, 230, 0, 2 * Math.PI, "#f5f5f5", "#2e7d32", 6);
+            
+            // Outer ring design with new colors (from both designs)
+            drawmultiplecirc(200, Math.PI/20, "#1b5e20", "#ffffff", 20, 45);
+            drawmultiplecirc(200, Math.PI/20, "#4caf50", "#ffffff", 10, 45);
+            
+            // Main green ring (replaced yellow)
+            drawcircle(centerX, centerY, 210, 0, 2 * Math.PI, "#4caf50", "#1b5e20", 8);
+            
+            // Decorative lines (from first design)
+            for(i = 0; i < 60; i++){  
+                con.beginPath();
+                con.lineWidth = 3;
+                con.strokeStyle = "#ff5722";
+                con.moveTo(centerX, centerY);
+                con.lineTo(centerX + 150 * Math.cos(i * Math.PI/30), centerY + 150 * Math.sin(i * Math.PI/30));
+                con.stroke();
+                con.closePath(); 
+            }
+            
+            // Middle ring
+            drawcircle(centerX, centerY, 135, 0, 2 * Math.PI, "#ff9800", "#e65100", 3);
+            
+            // Petal design with new colors (from both designs)
+            for(i = 1; i < 7; i++){  
+                con.beginPath();
+                con.fillStyle = "#ff5722";
+                con.strokeStyle = "#ff5722";
+                con.moveTo(centerX, centerY);
+                con.arc(centerX + 135 * Math.cos(Math.PI/6 + i * Math.PI/3), centerY + 135 * Math.sin(Math.PI/6 + i * Math.PI/3), 135, 5 * Math.PI/6 + i * Math.PI/3, 9 * Math.PI/6 + i * Math.PI/3);
+                con.stroke();
+                con.fill();
+                con.closePath(); 
+            }
+            
+            // Additional petal layers (from first design)
+            for(i = 1; i < 7; i++){  
+                con.beginPath();
+                con.fillStyle = "#4caf50";
+                con.strokeStyle = "#4caf50";
+                con.moveTo(centerX, centerY);
+                con.arc(centerX + 210 * Math.cos(i * Math.PI/3), centerY + 210 * Math.sin(i * Math.PI/3), 210, 2 * Math.PI/3 + i * Math.PI/3, 4 * Math.PI/3 + i * Math.PI/3);
+                con.stroke();
+                con.fill();
+                con.closePath();
+                
+                con.beginPath();
+                con.fillStyle = "#ffeb3b";
+                con.strokeStyle = "#ffeb3b";
+                con.moveTo(centerX, centerY);
+                con.arc(centerX + 135 * Math.cos(i * Math.PI/3), centerY + 135 * Math.sin(i * Math.PI/3), 135, 2 * Math.PI/3 + i * Math.PI/3, 4 * Math.PI/3 + i * Math.PI/3);
+                con.stroke();
+                con.fill();
+                con.closePath();  
+            }
+            
+            // Decorative elements with new colors (from first design)
+            for(i = 0; i < 15; i++){
+                con.beginPath();
+                con.fillStyle = "#e65100";
+                con.strokeStyle = "#ffffff";
+                con.arc(centerX + 185 * Math.cos(Math.PI/3 + i * Math.PI/6), centerY + 185 * Math.sin(Math.PI/3 + i * Math.PI/6), 5, 0, 2 * Math.PI);
+                con.closePath();
+                con.fill();
+                con.stroke();
+            }
+            
+            drawmultiplecirc(185, Math.PI/6, "#1b5e20", "#ffeb3b", 7, 15);
+            drawmultiplecirc(220, Math.PI/24, "#1b5e20", "#ff5722", 5, 50);
+            
+            for(i = 0; i < 15; i++){
+                con.beginPath();
+                con.fillStyle = "#ff5722";
+                con.strokeStyle = "#ffffff";
+                con.arc(centerX + 185 * Math.cos(Math.PI/6 + i * Math.PI/3), centerY + 185 * Math.sin(Math.PI/6 + i * Math.PI/3), 8, 0, 2 * Math.PI);
+                con.closePath();
+                con.fill();
+                con.stroke();
+            }
+            
+            for(i = 0; i < 15; i++){
+                con.beginPath();
+                con.fillStyle = "#ffeb3b";
+                con.strokeStyle = "#ff5722";
+                con.arc(centerX + 185 * Math.cos(Math.PI/6 + i * Math.PI/3), centerY + 185 * Math.sin(Math.PI/6 + i * Math.PI/3), 3, 0, 2 * Math.PI);
+                con.closePath();
+                con.fill();
+                con.stroke();
+            }
+            
+            for(i = 0; i < 15; i++){
+                con.beginPath();
+                con.fillStyle = "#ffeb3b";
+                con.strokeStyle = "#ff5722";
+                con.arc(centerX + 110 * Math.cos(Math.PI/6 + i * Math.PI/3), centerY + 110 * Math.sin(Math.PI/6 + i * Math.PI/3), 3, 0, 2 * Math.PI);
+                con.closePath();
+                con.fill();
+                con.stroke();
+            }
+            
+            // Core design with new colors (from first design)
+            drawcircle(centerX, centerY, 85, 0, 2 * Math.PI, "#ffeb3b", "#ff5722", 5);
+            
+            for(i = 1; i < 25; i++){
+                con.beginPath();
+                con.lineWidth = 2;
+                con.fillStyle = "#e65100";
+                con.strokeStyle = "#ffffff";
+                con.arc(centerX + 70 * Math.cos(i * Math.PI/12), centerY + 70 * Math.sin(i * Math.PI/12), 10, 0, 2 * Math.PI);
+                con.closePath();
+                con.fill();
+                con.stroke();
+            }
+            
+            drawcircle(centerX, centerY, 70, 0, 2 * Math.PI, "#ff9800", "#e65100", 5);
+            
+            for(i = 0; i < 10; i++){
+                con.beginPath();
+                con.lineWidth = 5;
+                con.fillStyle = "#e65100";
+                con.arc(centerX + 70 * Math.cos(i * Math.PI/3), centerY + 70 * Math.sin(i * Math.PI/3), 70, 2 * Math.PI/3 + i * Math.PI/3, 4 * Math.PI/3 + i * Math.PI/3);
+                con.fill();
+                con.closePath();
+            }
+            
+            for(i = 0; i < 10; i++){
+                con.beginPath();
+                con.lineWidth = 5;
+                con.strokeStyle = "#ffffff";
+                con.arc(centerX + 35 * Math.cos(i * Math.PI/3), centerY + 35 * Math.sin(i * Math.PI/3), 70, 2 * Math.PI/3 + i * Math.PI/3, 4 * Math.PI/3 + i * Math.PI/3);
+                con.stroke();
+                con.fillStyle = "#1b5e20";
+                con.fill();
+                con.closePath();
+            }
+            
+            // Draw traditional lamp (🪔) at the center
+            drawTraditionalLamp(centerX, centerY);
+            
+            // Add elements from the second design (cone-shaped petals)
+            drawConePetals(centerX, centerY);
+            
+            // Final decorative elements
+            drawmultiplecirc(30, Math.PI/6, "#ffffff", "#1b5e20", 4, 15);
+            drawmultiplecirc(15, Math.PI/3, "#e65100", "#ffffff", 2, 6);
+            drawmultiplecirc(70, Math.PI/6, "#1b5e20", "#ffeb3b", 4, 15);
+            
+            // Add fuller decorative elements inside the outer rings
+            drawFullerDecorations();
+            
+            // Add 6 large hourglass patterns extending from middle to outer edge
+            drawHourglassPatterns();
+            
+            // Add brown semi-circles above the orange triangles
+            drawBrownSemiCirclesAbove();
+            
+            // Add lamp emojis inside the semi-circles
+            addLampEmojis();
+        }
+        
+        // Function to draw traditional lamp
+        function drawTraditionalLamp(x, y) {
+            // Lamp base
+            con.beginPath();
+            con.fillStyle = "#ff9800";
+            con.strokeStyle = "#e65100";
+            con.lineWidth = 2;
+            con.moveTo(x - 12, y + 4);
+            con.lineTo(x - 16, y + 16);
+            con.lineTo(x + 16, y + 16);
+            con.lineTo(x + 12, y + 4);
+            con.closePath();
+            con.fill();
+            con.stroke();
+            
+            // Lamp body
+            con.beginPath();
+            con.fillStyle = "#ffeb3b";
+            con.strokeStyle = "#ff9800";
+            con.lineWidth = 2;
+            con.moveTo(x - 12, y + 4);
+            con.lineTo(x - 16, y - 20);
+            con.lineTo(x + 16, y - 20);
+            con.lineTo(x + 12, y + 4);
+            con.closePath();
+            con.fill();
+            con.stroke();
+            
+            // Lamp top
+            con.beginPath();
+            con.fillStyle = "#ff5722";
+            con.strokeStyle = "#e65100";
+            con.lineWidth = 2;
+            con.moveTo(x - 16, y - 20);
+            con.lineTo(x - 20, y - 24);
+            con.lineTo(x + 20, y - 24);
+            con.lineTo(x + 16, y - 20);
+            con.closePath();
+            con.fill();
+            con.stroke();
+            
+            // Flame
+            con.beginPath();
+            con.fillStyle = "#ff5722";
+            con.strokeStyle = "#ffeb3b";
+            con.lineWidth = 2;
+            con.moveTo(x, y - 32);
+            con.lineTo(x - 4, y - 24);
+            con.arc(x, y - 24, 4, Math.PI, 0, false);
+            con.closePath();
+            con.fill();
+            con.stroke();
+            
+            con.beginPath();
+            con.fillStyle = "#ffeb3b";
+            con.arc(x, y - 26, 2, 0, 2 * Math.PI);
+            con.closePath();
+            con.fill();
+        }
+        
+        // Function to draw cone petals (from second design)
+        function drawConePetals(ce1, ce2) {
+            var r = 100;
+            var a = ["red","orange","yellow","#00ff00","blue","rgb(0,159,255)"];
+            var degc = 20;
+            var start = 0;
+            
+            for(j = 0; j < a.length; j++) {
+                for(i = start; i <= 2 * Math.PI + start; i += 10 * Math.PI/180) {
+                    cone(con, r * Math.cos(i) + ce1, r * Math.sin(i) + ce2, 
+                         r * Math.cos(i + degc * Math.PI/180) + ce1, 
+                         r * Math.sin(i + degc * Math.PI/180) + ce2, 
+                         ce1, ce2, a[j], 1);
+                }
+                r -= 8;
+                start += 5 * Math.PI/180;
+                if(r <= 35) break;
+            }
+            
+            // Inner ellipse hands (from second design)
+            start = 0;
+            r = 35;
+            for(j = 0; j < 8; j++) {
+                for(i = a.length - 1; i >= 0; i--) {
+                    con.beginPath();
+                    con.ellipse(ce1, ce2, r, r/10, 10*i + start, 0, 2 * Math.PI);
+                    con.fillStyle = a[i];
+                    con.fill();
+                    con.closePath();
+                }
+                start += 6;
+                r -= 3;
+            }
+        }
+        
+        // Cone function from second design
+        function cone(ctx, x1, y1, x2, y2, ce1, ce2, color, opt) {
+            var x3 = 0, y3 = 0, x4 = 0, y4 = 0;
+            var l = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+            
+            if(opt == 1) l *= 1.0;
+            else l *= 0.8;
+            
+            if((color == "blue") || (color == "rgb(0,159,255)")) l *= 0.9;
+            
+            if(y2 == y1) {
+                x3 = x1;
+                x4 = x2;
+                y3 = l + y1;
+                y4 = l + y2;
+            } else {
+                var m = -(x2 - x1)/(y2 - y1);
+                var lm = l/Math.sqrt(m*m + 1);
+                
+                var si = sign(lm, m, ce1, ce2, x1, y1);
+                x3 = x1 + si;
+                y3 = y1 + si * m;
+                
+                si = sign(lm, m, ce1, ce2, x2, y2);
+                x4 = x2 + si;
+                y4 = si * m + y2;
+            }
+            
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            if(opt == 1) {
+                ctx.quadraticCurveTo((x1 + x3)/2, (y1 + y3)/2, (x3 + x4)/2, (y3 + y4)/2);
+                ctx.quadraticCurveTo((x2 + x4)/2, (y2 + y4)/2, x2, y2);
+            } else {
+                ctx.bezierCurveTo(x3, y3, (x1 + x2)/2, (y1 + y2)/2, (x3 + x4)/2, (y3 + y4)/2);
+                ctx.bezierCurveTo((x1 + x2)/2, (y1 + y2)/2, x4, y4, x2, y2);
+            }
+            ctx.lineTo(x1, y1);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.closePath();
+        }
+        
+        function sign(lm, m, ce1, ce2, x, y) {
+            var x1 = lm + x;
+            var y1 = lm * m + y;
+            if(((ce1 - x1) * (ce1 - x1) + (ce2 - y1) * (ce2 - y1)) > 
+               ((ce1 - x) * (ce1 - x) + (ce2 - y) * (ce2 - y))) {
+                return lm;
+            } else {
+                return -lm;
+            }
+        }
+        
+        // Function to draw fuller decorations inside outer rings
+        function drawFullerDecorations() {
+            // Draw fuller decorative elements inside the outer rings
+            for(i = 0; i < 24; i++){
+                con.beginPath();
+                con.fillStyle = "#ffeb3b";
+                con.strokeStyle = "#ff5722";
+                con.lineWidth = 2;
+                con.arc(centerX + 220 * Math.cos(i * Math.PI/12), centerY + 220 * Math.sin(i * Math.PI/12), 7, 0, 2 * Math.PI);
+                con.closePath();
+                con.fill();
+                con.stroke();
+            }
+            
+            for(i = 0; i < 36; i++){
+                con.beginPath();
+                con.fillStyle = "#4caf50";
+                con.strokeStyle = "#1b5e20";
+                con.lineWidth = 2;
+                con.arc(centerX + 230 * Math.cos(i * Math.PI/18), centerY + 230 * Math.sin(i * Math.PI/18), 4, 0, 2 * Math.PI);
+                con.closePath();
+                con.fill();
+                con.stroke();
+            }
+            
+            // Add more detailed patterns between the rings
+            for(i = 0; i < 12; i++){
+                con.beginPath();
+                con.fillStyle = "#ff9800";
+                con.strokeStyle = "#e65100";
+                con.lineWidth = 2;
+                con.arc(centerX + 215 * Math.cos(i * Math.PI/6), centerY + 215 * Math.sin(i * Math.PI/6), 10, 0, 2 * Math.PI);
+                con.closePath();
+                con.fill();
+                con.stroke();
+                
+                con.beginPath();
+                con.fillStyle = "#ffffff";
+                con.arc(centerX + 215 * Math.cos(i * Math.PI/6), centerY + 215 * Math.sin(i * Math.PI/6), 4, 0, 2 * Math.PI);
+                con.closePath();
+                con.fill();
+            }
+        }
+        
+        // Function to draw 6 large hourglass patterns extending from middle to outer edge
+        function drawHourglassPatterns() {
+            // Draw 6 large hourglass patterns extending from middle to outer edge
+            for(i = 0; i < 6; i++){
+                var angle = i * Math.PI/3;
+                
+                // Draw large hourglass pattern
+                con.save();
+                con.translate(centerX, centerY);
+                con.rotate(angle);
+                
+                // Draw the hourglass shape extending from center to outer edge
+                var innerRadius = 70;
+                var outerRadius = 210;
+                var width = 35;
+                
+                // Upper triangle (pointing outward)
+                con.beginPath();
+                con.moveTo(0, -innerRadius);
+                con.lineTo(-width, -outerRadius);
+                con.lineTo(width, -outerRadius);
+                con.closePath();
+                con.fillStyle = "#ffeb3b";
+                con.fill();
+                con.strokeStyle = "#ff5722";
+                con.lineWidth = 2;
+                con.stroke();
+                
+                // Lower triangle (pointing inward)
+                con.beginPath();
+                con.moveTo(0, -innerRadius);
+                con.lineTo(-width, -outerRadius);
+                con.lineTo(width, -outerRadius);
+                con.closePath();
+                con.fillStyle = "#ff5722";
+                con.fill();
+                con.strokeStyle = "#ffeb3b";
+                con.lineWidth = 2;
+                con.stroke();
+                
+                // Add decorative elements inside the hourglass
+                con.beginPath();
+                con.arc(0, - (innerRadius + outerRadius)/2, 10, 0, 2 * Math.PI);
+                con.fillStyle = "#4caf50";
+                con.fill();
+                con.strokeStyle = "#1b5e20";
+                con.lineWidth = 2;
+                con.stroke();
+                
+                con.restore();
+            }
+        }
+        
+        // Function to draw brown semi-circles above the orange triangles
+        function drawBrownSemiCirclesAbove() {
+            // Draw brown semi-circles above the orange triangles
+            for(i = 0; i < 6; i++){
+                var angle = i * Math.PI/3;
+                
+                con.save();
+                con.translate(centerX, centerY);
+                con.rotate(angle);
+                
+                // Draw semi-circle above the orange triangle
+                // Positioned at the top of the triangle, just above it
+                con.beginPath();
+                con.arc(0, -215, 35, 0, Math.PI, false); // Regular semi-circle facing upward
+                con.fillStyle = "#8B4513"; // Brown color
+                con.fill();
+                con.strokeStyle = "#654321"; // Dark brown border
+                con.lineWidth = 2;
+                con.stroke();
+                
+                con.restore();
+            }
+        }
+        
+        // Function to add lamp emojis inside the semi-circles
+        function addLampEmojis() {
+            // Clear any existing emojis
+            emojiContainer.innerHTML = '';
+            
+            // Add lamp emojis inside each semi-circle
+            for(i = 0; i < 6; i++){
+                var angle = i * Math.PI/3;
+                
+                // Position the emoji at the center of the semi-circle
+                // The semi-circle is positioned at 215px from center, with radius 35
+                // The emoji should be placed at the center of the semi-circle
+                var x = centerX + 215 * Math.cos(angle);
+                var y = centerY + 215 * Math.sin(angle);
+                
+                // Adjust position to be centered in the semi-circle
+                // Since the semi-circle is drawn facing upward, we need to adjust
+                // the y position to place the emoji inside the semi-circle
+                var offsetY = -35; // Move up by the radius of the semi-circle
+                
+                // Rotate the offset to match the angle
+                var rotatedOffsetX = offsetY * Math.sin(angle);
+                var rotatedOffsetY = -offsetY * Math.cos(angle);
+                
+                // Final position - adjusted to be at the base of the triangle
+                // Final position - middle of the semi-circle
+                // Final position - centered inside the semi-circle
+                // Final position - middle of the semi-circle
+var finalX = x + rotatedOffsetX + 189; // shift 5cm (~189px) to the right
+var finalY = y + rotatedOffsetY;
+
+
+// Move emojis 5 cm (approx 189px) to the right
+                finalX += 225;
+                
+
+                // compute original center of the semi-circle (radius = 215)
+var baseRadius = 210;
+var arcShiftPx = 111; // clockwise shift along the arc (~5 cm). adjust if you want more/less
+var angleShift = arcShiftPx / baseRadius; // radians to shift along the circle
+var shiftedAngle = angle - angleShift; // clockwise => subtract
+
+// pull emoji slightly inward from the ring so it sits inside the semi-circle
+var inwardNudge = 12; // pixels inward from the semi-circle center (tweak if needed)
+
+// Final position on the moved (shifted) point of the ring
+var finalX = centerX + (baseRadius - inwardNudge) * Math.cos(shiftedAngle) + 150;
+var finalY = centerY + (baseRadius - inwardNudge) * Math.sin(shiftedAngle);
+
+// small vertical nudge so emoji visually sits inside the brown arc
+finalY -= 5;
+
+                
+                // Create and position the emoji element
+                var emoji = document.createElement('div');
+                emoji.className = 'emoji';
+                emoji.textContent = '🪔';
+                emoji.style.left = finalX + 'px';
+                emoji.style.top = finalY + 'px';
+                
+                // Add to container
+                emojiContainer.appendChild(emoji);
+            }
+        }
+        
+        // Helper functions
+        function drawmultiplecirc(r, ang, col1, col2, r2, rep){
+            for(i = 0; i < rep; i++){
+                con.beginPath();
+                con.fillStyle = col1;
+                con.strokeStyle = col2;
+                con.arc(centerX + r * Math.cos(i * ang), centerY + r * Math.sin(i * ang), r2, 0, 2 * Math.PI);
+                con.closePath();
+                con.fill();
+                con.stroke();
+            }
+        }
+
+        function drawcircle(x, y, r, sang, eang, color, scolor, thickness){
+            con.beginPath();
+            con.fillStyle = color;
+            con.arc(x, y, r, sang, eang);
+            con.strokeStyle = scolor;
+            con.lineWidth = thickness;
+            con.stroke();
+            con.fill();
+            con.closePath();
+        }
+        
+        // Draw the pookalam
+        drawPookalam();
+    </script>
+</body>
+</html>
