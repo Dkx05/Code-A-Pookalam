@@ -30,7 +30,10 @@ What makes it special is the use of **technology to replicate cultural beauty**,
 
 
 ### Screenshots
-(https://github.com/Dkx05/Code-A-Pookalam/blob/main/Devi%20Krishna%20M%20S/pookalam.png)
+<p align="center">
+  <img src="https://github.com/Dkx05/Code-A-Pookalam/blob/main/Devi%20Krishna%20M%20S/pookalam.png" alt="Pookalam" width="600">
+</p>
+
 
 
 
