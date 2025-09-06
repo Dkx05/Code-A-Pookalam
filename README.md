@@ -27,7 +27,7 @@ What makes it special is the use of **technology to replicate cultural beauty**,
 - CSS  
 - JavaScript 
 
-### Video explaining How you build the pookalam
+### Video explaining How I build the pookalam
 [▶️ Watch the video on Google Drive](https://drive.google.com/file/d/1e15WI0eKEfTnUEh4OfiR74d3nA3ChcVL/view?usp=drivesdk)
 
 
