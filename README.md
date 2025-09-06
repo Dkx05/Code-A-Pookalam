@@ -4,7 +4,7 @@
 Welcome to CODE-A-പൂക്കളം, a creative coding challenge scheduled from September 1–6, where tradition meets technology! 🌼
 
 
-### Your Details
+### My Details
 - Devi Krishna M S - ERE - S5
 
 
