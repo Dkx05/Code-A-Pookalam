@@ -5,7 +5,7 @@ Welcome to CODE-A-പൂക്കളം, a creative coding challenge scheduled f
 
 
 ### Your Details
-- [Name] - [Branch] - [Semester]
+- Devi Krishna M S - ERE - S5
 
 
 
@@ -14,12 +14,16 @@ Welcome to CODE-A-പൂക്കളം, a creative coding challenge scheduled f
 
 
 ### Pookalam Description
-Brief description about your pookalam. What makes it special and different.
+This Pookalam design blends traditional Onam floral art with modern coding creativity.  
+The design is represented digitally, reflecting the festive vibrance with symmetry, patterns, and colorful elements.  
+What makes it special is the use of **technology to replicate cultural beauty**, making Onam celebrations inclusive in the digital world.  
 
 
 
 ### Technologies Used 
-
+- HTML  
+- CSS  
+- JavaScript 
 
 ### Video explaining How you build the pookalam
 
